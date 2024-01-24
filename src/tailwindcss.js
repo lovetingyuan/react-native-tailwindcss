@@ -25,7 +25,7 @@ function _s(classes) {
   return styles
 }
 
-window.tw = function tw(classes, style) {
+function tw(classes, style) {
   if (!classes) {
     return null
   }
@@ -38,3 +38,7 @@ window.tw = function tw(classes, style) {
   }
   return [...twStyles, style]
 }
+
+window.tw = tw
+
+export default tw

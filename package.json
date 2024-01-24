@@ -1,0 +1,35 @@
+{
+  "name": "@tingyuan/react-native-tailwindcss",
+  "version": "0.0.1",
+  "description": "use tailwindcss in react-native project",
+  "main": "index.js",
+  "bin": {
+    "react-native-tailwindcss-start": "./src/start-tailwind.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "src",
+    "*.js"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bugs": {
+    "url": "https://github.com/lovetingyuan/react-native-tailwindcss/issues"
+  },
+  "homepage": "https://github.com/lovetingyuan/react-native-tailwindcss#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lovetingyuan/react-native-tailwindcss.git"
+  },
+  "keywords": [
+    "tailwindcss",
+    "react-native",
+    "expo"
+  ],
+  "author": "tingyuan",
+  "license": "MIT"
+}
