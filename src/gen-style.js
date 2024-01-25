@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const postcss = require('postcss')
 const cssvariables = require('postcss-css-variables')
 const totailwind = require('./postcss-plugin')
