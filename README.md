@@ -28,7 +28,11 @@ Use [tailwindcss](https://tailwindcss.com/) in react-native project
    npx react-native-tailwindcss-start
    ```
 
-   for build, run `npx react-native-tailwindcss-build`
+   for build, run:
+
+   ```bash
+   npx react-native-tailwindcss-build
+   ```
 
 ### example
 
@@ -60,6 +64,7 @@ To support infer global `tw` helper function type and `className` jsx attribute,
 add three slash directive in a `.d.ts` file:
 
 `/// <reference types="@tingyuan/react-native-tailwindcss/types" />`
+
 `/// <reference types="nativewind/types" />`
 
 or import the types in a `.d.ts` file:
