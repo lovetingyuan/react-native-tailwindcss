@@ -1,6 +1,6 @@
 {
   "name": "@tingyuan/react-native-tailwindcss",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "use tailwindcss in react-native project",
   "main": "index.js",
   "bin": {
