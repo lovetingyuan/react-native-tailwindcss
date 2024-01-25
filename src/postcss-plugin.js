@@ -47,6 +47,13 @@ module.exports = (
         if (value.endsWith('rem')) {
           value = value.replace(/(\d*\.?\d+)rem/g, (match, m1) => parseFloat(m1, 10) * 16 + 'px')
         }
+        if (prop === 'transform') {
+          value = value
+            .replace('rotate(0)', 'rotate(0deg)')
+            .replace('skew(0)', 'skew(0deg)')
+            .replace('skewX(0)', 'skewX(0deg)')
+            .replace('skewY(0)', 'skewY(0deg)')
+        }
         const result = transform.default([[prop, value]])
         const classname = decl.parent.selector.slice(1).replace(/\\/g, '')
         if (!opts.cssObject[classname]) {
