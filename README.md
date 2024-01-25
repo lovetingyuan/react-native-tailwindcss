@@ -67,6 +67,19 @@ or add the types in your `tsconfig.json`:
 
 `{ "types": [ "@tingyuan/react-native-tailwindcss/types"] }`
 
+### Tailwind CSS IntelliSense
+
+support `tw()` code hints and completion
+
+```js
+"tailwindCSS.experimental.classRegex": [
+  [
+    "tw\\(([^)]*)\\)",
+    "[\"'`]([^\"'`]*).*?[\"'`]"
+  ],
+]
+```
+
 ### eslint
 
 ```js
