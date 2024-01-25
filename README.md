@@ -12,34 +12,30 @@ Use [tailwindcss](https://tailwindcss.com/) in react-native project
 
 2. add the babel plugin to `babel.config.js`
 
-```js
-module.exports = function (api) {
-  api.cache(true)
-  return {
-    presets: ['babel-preset-expo'],
-    plugins: ['@tingyuan/react-native-tailwindcss/babel'],
-  }
-}
-```
+   ```js
+   module.exports = function (api) {
+     api.cache(true)
+     return {
+       presets: ['babel-preset-expo'],
+       plugins: ['@tingyuan/react-native-tailwindcss/babel'],
+     }
+   }
+   ```
 
-3. import the runtime module at the very beginning code position
+3. start tailwindcss watch task for development.
 
-```js
-import '@tingyuan/react-native-tailwindcss'
-```
-
-4. start tailwindcss watch task for development.
-
-`npx react-native-tailwindcss-start`
+   `npx react-native-tailwindcss-start`
 
 ### example
 
 ```jsx
-function App() {
+function App(props: { textColor: string }) {
   const renderItem = ({ item }) => <Text>{item.title}</Text>
   return (
-    <View className="flex-1 flex-row">
-      <Text className="font-bold text-green-500 text-lg">hello tailwindcss</Text>
+    <View className="flex-1 flex-row h-full">
+      <Text className="font-bold text-green-500 text-lg" style={{ color: props.textColor }}>
+        Hello Tailwindcss
+      </Text>
       <FlashList
         data={DATA}
         renderItem={renderItem}
@@ -51,4 +47,28 @@ function App() {
 }
 ```
 
-jsx `className` will be transformed to `style` and `tw('')` will be transformed to style object.
+jsx attribute `className` will be transformed to `style` and `tw('')` will be transformed to style object.
+
+### TypeScript support
+
+To support infer global `tw` helper function type, you can:
+
+add three slash directive in a `.d.ts` file:
+
+`/// <reference types="@tingyuan/react-native-tailwindcss/types" />`
+
+or import the types in a `.d.ts` file:
+
+`import "@tingyuan/react-native-tailwindcss/types"`
+
+or add the types in your `tsconfig.json`:
+
+`{ "types": [ "@tingyuan/react-native-tailwindcss/types"] }`
+
+### eslint
+
+```js
+{
+  globals: { tw: 'readonly' },
+}
+```

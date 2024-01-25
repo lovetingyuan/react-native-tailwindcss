@@ -1,4 +1,5 @@
 import tailwindStyles from './style'
+import { StyleSheet } from 'react-native'
 
 const cache = {}
 
@@ -9,34 +10,31 @@ function _s(classes) {
   if (classes in cache) {
     return cache[classes]
   }
-  const classList = classes
-    .split(' ')
+  const styles = classes
+    .split(/\s+/)
     .map(v => v.trim())
     .filter(Boolean)
-  const styles = classList.map(c => {
-    const ret = tailwindStyles[c]
-    if (!ret) {
-      throw new Error(`class ${c} does not exist in generated tailwindStyles`)
-    }
-    return ret
-  })
-
-  cache[classes] = styles
-  return styles
+    .map(c => {
+      const ret = tailwindStyles[c]
+      if (!ret) {
+        throw new Error(`class ${c} does not exist in generated tailwindStyles`)
+      }
+      return ret
+    })
+  const style = StyleSheet.flatten(styles)
+  cache[classes] = style
+  return style
 }
 
-function tw(classes, style) {
+function tw(classes, ...styles) {
   if (!classes) {
     return null
   }
   const twStyles = _s(classes)
-  if (!style) {
+  if (!styles.length) {
     return twStyles
   }
-  if (Array.isArray(style)) {
-    return [...twStyles, ...style]
-  }
-  return [...twStyles, style]
+  return StyleSheet.flatten([twStyles, ...styles])
 }
 
 window.tw = tw
