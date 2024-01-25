@@ -28,6 +28,8 @@ Use [tailwindcss](https://tailwindcss.com/) in react-native project
    npx react-native-tailwindcss-start
    ```
 
+   for build, run `npx react-native-tailwindcss-build`
+
 ### example
 
 ```jsx

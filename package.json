@@ -4,13 +4,15 @@
   "description": "use tailwindcss in react-native project",
   "main": "index.js",
   "bin": {
-    "react-native-tailwindcss-start": "./src/start-tailwind.js"
+    "react-native-tailwindcss-start": "./src/start-tailwind.js",
+    "react-native-tailwindcss-build": "./src/build-tailwind.js"
   },
   "scripts": {
     "test": "echo 1",
     "build": "echo 2",
     "prepublishOnly": "npm run build && npm test",
-    "pub": "npx np"
+    "pub": "npx np",
+    "postinstall": "node ./src/build-tailwind.js"
   },
   "files": [
     "src",
