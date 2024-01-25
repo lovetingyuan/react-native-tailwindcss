@@ -11,7 +11,7 @@ module.exports = (
   opts = {
     cssObject: {},
     ignoreClasses: [],
-  },
+  }
 ) => {
   // Work with options here
 
@@ -29,7 +29,7 @@ module.exports = (
         decl.parent.selector.startsWith('.')
       ) {
         let { prop, value } = decl
-        if (opts.ignoreClasses?.includes(prop)) {
+        if (opts.ignoreClasses?.includes(decl.parent.selector)) {
           return
         }
         // console.log('DeclarationExit', decl.parent.selector, prop, value)
@@ -45,10 +45,7 @@ module.exports = (
           }
         }
         if (value.endsWith('rem')) {
-          value = value.replace(
-            /(\d*\.?\d+)rem/g,
-            (match, m1) => parseFloat(m1, 10) * 16 + 'px',
-          )
+          value = value.replace(/(\d*\.?\d+)rem/g, (match, m1) => parseFloat(m1, 10) * 16 + 'px')
         }
         const result = transform.default([[prop, value]])
         const classname = decl.parent.selector.slice(1).replace(/\\/g, '')
