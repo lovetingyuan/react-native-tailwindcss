@@ -8,9 +8,9 @@ Use [tailwindcss](https://tailwindcss.com/) in react-native project
 
 ### usage
 
-1. run `npx tailwindcss init` and follow tailwindcss [installation](https://tailwindcss.com/docs/installation).
+1. Run `npx tailwindcss init` if `tailwind.config.js` does not exist. (see [installation](https://tailwindcss.com/docs/installation)).
 
-2. add the babel plugin to `babel.config.js`
+2. Add the babel plugin to `babel.config.js`.
 
    ```js
    module.exports = function (api) {
@@ -22,9 +22,11 @@ Use [tailwindcss](https://tailwindcss.com/) in react-native project
    }
    ```
 
-3. start tailwindcss watch task for development.
+3. Start tailwindcss watch task for development.
 
-   `npx react-native-tailwindcss-start`
+   ```bash
+   npx react-native-tailwindcss-start
+   ```
 
 ### example
 

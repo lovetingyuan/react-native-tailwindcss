@@ -17,7 +17,9 @@ function _s(classes) {
     .map(c => {
       const ret = tailwindStyles[c]
       if (!ret) {
-        throw new Error(`class ${c} does not exist in generated tailwindStyles`)
+        throw new Error(
+          `@tingyuan/react-native-tailwindcss: class ${c} does not exist in generated tailwind styles.( node_modules/@tingyuan/react-native-tailwindcss/src/style.js )`
+        )
       }
       return ret
     })
