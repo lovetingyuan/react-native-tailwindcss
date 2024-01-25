@@ -55,11 +55,12 @@ jsx attribute `className` will be transformed to `style` and `tw('')` will be tr
 
 ### TypeScript support
 
-To support infer global `tw` helper function type, you can:
+To support infer global `tw` helper function type and `className` jsx attribute, you can:
 
 add three slash directive in a `.d.ts` file:
 
 `/// <reference types="@tingyuan/react-native-tailwindcss/types" />`
+`/// <reference types="nativewind/types" />`
 
 or import the types in a `.d.ts` file:
 
