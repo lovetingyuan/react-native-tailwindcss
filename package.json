@@ -50,6 +50,8 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.23.3",
+    "babel-preset-expo": "^10.0.1",
+    "expo": "^50.0.4",
     "np": "^9.2.0"
   }
 }

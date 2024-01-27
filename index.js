@@ -1,3 +1,1 @@
-import tw from './src/tailwindcss'
-
-export default tw
+export { useTw } from './src/tailwindcss'

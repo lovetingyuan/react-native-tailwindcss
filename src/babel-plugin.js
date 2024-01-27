@@ -33,25 +33,27 @@ module.exports = function ({ types: t }) {
 
             // 在函数声明的函数体第一行插入 `const tw = useTw()`
             if (t.isBlockStatement(body)) {
-              const firstStatement = body.node.body[0]
               if (
-                firstStatement &&
-                t.isVariableDeclaration(firstStatement) &&
-                firstStatement.kind === 'const' &&
-                firstStatement.declarations.length > 0 &&
-                t.isIdentifier(firstStatement.declarations[0].id, { name: 'tw' })
+                body.node.body.some(statement => {
+                  if (
+                    statement &&
+                    t.isVariableDeclaration(statement) &&
+                    // statement.kind === 'const' &&
+                    statement.declarations.length > 0 &&
+                    t.isIdentifier(statement.declarations[0].id, { name: 'tw' })
+                  ) {
+                    return true
+                  }
+                })
               ) {
                 return
               }
 
+              const calling = t.callExpression(t.identifier('useTw'), [])
+              t.addComment(calling, 'leading', '#__PURE__')
               body.unshiftContainer(
                 'body',
-                t.variableDeclaration('const', [
-                  t.variableDeclarator(
-                    t.identifier('tw'),
-                    t.callExpression(t.identifier('useTw'), [])
-                  ),
-                ])
+                t.variableDeclaration('const', [t.variableDeclarator(t.identifier('tw'), calling)])
               )
             }
           }
