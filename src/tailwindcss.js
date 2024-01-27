@@ -1,5 +1,5 @@
 import tailwindStyles from './style'
-import { StyleSheet, Appearance } from 'react-native'
+import { StyleSheet, Appearance, useColorScheme } from 'react-native'
 
 const cache = {}
 
@@ -56,6 +56,7 @@ function tw(classes, ...styles) {
   return StyleSheet.flatten([twStyles, ...styles])
 }
 
-window.tw = tw
-
-export default tw
+export function useTw() {
+  useColorScheme()
+  return tw
+}
