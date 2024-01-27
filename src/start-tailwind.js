@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const fs = require('fs')
 const genStyle = require('./gen-style')
 
 function debounce(func, delay) {
@@ -21,8 +22,18 @@ function startTailwind(root) {
     cwd: root,
   })
   let css = ''
+  const writeToCss = process.argv.slice(2).find(v => v.startsWith('--write'))
 
-  const handleCssChange = debounce(genStyle, 500)
+  const handleCssChange = debounce(css => {
+    if (writeToCss) {
+      const file = writeToCss.split('=')[1] || 'tailwind.css'
+      if (!file.endsWith('.css')) {
+        file += '.css'
+      }
+      fs.writeFileSync(file, css)
+    }
+    genStyle(css)
+  }, 500)
 
   child.stderr.on('data', data => {
     console.log('TailwindCSS: ' + data.toString().trim())

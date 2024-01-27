@@ -1,7 +1,15 @@
 import tailwindStyles from './style'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Appearance } from 'react-native'
 
 const cache = {}
+
+Appearance.addChangeListener(() => {
+  Object.keys(cache).forEach(k => {
+    if (k.includes('dark:')) {
+      delete cache[k]
+    }
+  })
+})
 
 function _s(classes) {
   if (typeof classes !== 'string') {
@@ -10,10 +18,19 @@ function _s(classes) {
   if (classes in cache) {
     return cache[classes]
   }
+  const isDark = Appearance.getColorScheme() === 'dark'
   const styles = classes
     .split(/\s+/)
     .map(v => v.trim())
-    .filter(Boolean)
+    .filter(v => {
+      if (!v) {
+        return false
+      }
+      if (!isDark && v.startsWith('dark:')) {
+        return false
+      }
+      return true
+    })
     .map(c => {
       const ret = tailwindStyles[c]
       if (!ret) {

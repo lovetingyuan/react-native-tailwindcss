@@ -17,15 +17,12 @@ module.exports = (
 
   return {
     postcssPlugin: 'postcss-css-to-tailwind',
-    // Root(root, postcss) {
-    //   // Transform CSS AST here
-    //   console.log(44444, opts.ignoreClasses)
-    // },
+
     DeclarationExit(decl) {
       // 检查属性声明是否在顶层的class选择器规则中
       if (
         decl.parent.type === 'rule' &&
-        decl.parent.parent.type === 'root' &&
+        // decl.parent.parent.type === 'root' &&
         decl.parent.selector.startsWith('.')
       ) {
         let { prop, value } = decl
