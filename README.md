@@ -88,10 +88,20 @@ support `tw()` code hints and completion
 ]
 ```
 
-### eslint
+### Eslint
 
 ```js
 {
   globals: { tw: 'readonly' },
 }
 ```
+
+### Caveats
+
+The babel plugin will automatically inject `const tw = useTw()` in each react component function.
+
+`useTw` is a hook callee, so using `className` or `tw()` must be in react component function.
+
+When the function name is "UpperCamelCase" style and has jsx statement, the function self will be treated as a react component function.
+
+So when you encounter error like `Rendered fewer hooks than expected` or `Property 'tw' doesn't exist`, you need to obey the limitation mentioned above.

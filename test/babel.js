@@ -2,82 +2,119 @@ const babel = require('@babel/core')
 const result = babel.transformSync(
   `
   import React from 'react'
-  import VideoHeader from './VideoHeader'
-  import { View } from 'react-native'
-  import { useVideoInfo } from '../../api/video-info'
-  import { ListItem, Text, Icon, useTheme } from '@rneui/themed'
+import {
+  View,
+  Image,
+  ScrollView,
+  Dimensions,
+  RefreshControl,
+} from 'react-native'
+import { WebView } from 'react-native-webview'
+import { INJECTED_JAVASCRIPT } from './inject-code'
+import { RootStackParamList } from '../../types'
+import { useStore } from '../../store'
+import HeaderRight from './HeaderRight'
+import useIsDark from '../../hooks/useIsDark'
+import { UA } from '../../constants'
+import { showToast } from '../../utils'
 
-  export default React.memo(function VideoInfo(props) {
-    const { changePage } = props
-    const { data: videoInfo, isLoading } = useVideoInfo(props.bvid)
-    const [expanded, setExpanded] = React.useState(false)
-    const { theme } = useTheme()
+function Loading() {
+  return (
+    <View className="absolute w-full h-full justify-center items-center">
+      <Image
+        source={require('../../../assets/video-loading.png')}
+        resizeMode="center"
+        className="w-full"
+      />
+    </View>
+  )
+}
 
-    const { title, desc } = videoInfo || {}
-    let videoDesc = desc
-    if (videoDesc === '-') {
-      videoDesc = ''
-    } else if (videoDesc && videoDesc === title) {
-      videoDesc = ''
+export default React.memo(function WebPage({ route, navigation }) {
+  const { url, title } = route.params
+  const webviewRef = React.useRef<WebView | null>(null)
+  const { webViewMode } = useStore()
+  const isDark = useIsDark()
+  const [height, setHeight] = React.useState(Dimensions.get('screen').height)
+  const [isEnabled, setEnabled] = React.useState(true)
+  const [isRefreshing, setRefreshing] = React.useState(false)
+  const onRefresh = React.useCallback(() => {
+    if (webviewRef.current) {
+      setRefreshing(true)
+      webviewRef.current.reload()
+      setTimeout(() => {
+        setRefreshing(false)
+      }, 1000)
     }
-    return (
-      <>
-        <VideoHeader bvid={props.bvid} />
-        <View>
-          <Text className="text-base mt-3">{title}</Text>
-          {videoDesc ? <Text className="mt-3">{videoDesc}</Text> : null}
-          {(videoInfo?.pages?.length || 0) > 1 && props.page ? (
-            <ListItem.Accordion
-              icon={<Icon name={'chevron-down'} type="material-community" />}
-              containerStyle={tw('py-1 px-3 mt-5')}
-              content={
-                <ListItem.Content>
-                  <ListItem.Title>
-                    视频分集（{videoInfo?.pages?.length}） {props.page}:{' '}
-                    {videoInfo?.pages?.[props.page - 1].title}
-                  </ListItem.Title>
-                </ListItem.Content>
-              }
-              isExpanded={expanded}
-              onPress={() => {
-                setExpanded(!expanded)
-              }}>
-              {videoInfo?.pages?.map(v => {
-                const selected = v.page === props.page
-                return (
-                  <ListItem
-                    key={v.page}
-                    onPress={() => {
-                      changePage(v.page)
-                    }}
-                    containerStyle={tw('py-3 px-5')}
-                    bottomDivider
-                    topDivider>
-                    <ListItem.Content>
-                      <ListItem.Title
-                        className={
-                          selected
-                            ? \`font-bold text\`
-                            : 'text-gray-500'
-                        }>
-                        {v.page}. {v.title}
-                      </ListItem.Title>
-                    </ListItem.Content>
-                  </ListItem>
-                )
-              })}
-            </ListItem.Accordion>
-          ) : !isLoading &&
-            videoInfo?.videos &&
-            videoInfo?.videos !== videoInfo?.pages?.length ? (
-            <Text className="mt-3 italic" style={{ color: theme.colors.warning }}>
-              该视频为交互视频，暂不支持
-            </Text>
-          ) : null}
-        </View>
-      </>
-    )
-  })
+  }, [])
+  React.useEffect(() => {
+    const headerRight = () => {
+      return <HeaderRight reload={onRefresh} />
+    }
+    navigation.setOptions({
+      headerRight,
+    })
+  }, [navigation, onRefresh])
+  return (
+    <ScrollView
+      onLayout={e => setHeight(e.nativeEvent.layout.height)}
+      refreshControl={
+        <RefreshControl
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
+          enabled={isEnabled}
+        />
+      }
+      className="flex-1 h-full">
+      <WebView
+        className="flex-1"
+        style={{ height }}
+        source={{ uri: url }}
+        key={webViewMode}
+        onScroll={e => setEnabled(e.nativeEvent.contentOffset.y === 0)}
+        originWhitelist={['http://*', 'https://*', 'bilibili://*']}
+        allowsFullscreenVideo
+        injectedJavaScriptForMainFrameOnly
+        allowsInlineMediaPlayback
+        startInLoadingState
+        pullToRefreshEnabled
+        applicationNameForUserAgent={'BILIBILI/8.0.0'}
+        // allowsBackForwardNavigationGestures
+        mediaPlaybackRequiresUserAction={false}
+        injectedJavaScript={INJECTED_JAVASCRIPT}
+        renderLoading={Loading}
+        userAgent={webViewMode === 'MOBILE' ? '' : UA}
+        ref={webviewRef}
+        onMessage={evt => {
+          const data = JSON.parse(evt.nativeEvent.data)
+          if (data.action === 'set-title' && !title) {
+            navigation.setOptions({
+              headerTitle: data.payload,
+            })
+          }
+        }}
+        onLoad={() => {
+
+        }}
+        onError={() => {
+          showToast('加载失败')
+        }}
+        onShouldStartLoadWithRequest={request => {
+          if (request.url.startsWith('bilibili://')) {
+            // Linking.openURL(request.url).catch(err => {
+            //   __DEV__ && console.error(err)
+            // })
+            return false
+          }
+          if (request.url.includes('.apk')) {
+            return false
+          }
+          return true
+        }}
+      />
+    </ScrollView>
+  )
+})
 
 `,
   {
