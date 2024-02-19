@@ -22,17 +22,19 @@ Use [tailwindcss](https://tailwindcss.com/) in react-native project
    }
    ```
 
-3. Start tailwindcss watch task for development.
+3. Start tailwindcss watch task.
 
-   ```bash
-   npx react-native-tailwindcss-start
-   ```
+for development, run:
 
-   for build, run:
+```bash
+npx react-native-tailwindcss-start
+```
 
-   ```bash
-   npx react-native-tailwindcss-build
-   ```
+for build, run this before the building app command:
+
+```bash
+npx react-native-tailwindcss-build
+```
 
 ### example
 
@@ -64,8 +66,6 @@ To support infer global `tw` helper function type and `className` jsx attribute,
 add three slash directive in a `.d.ts` file:
 
 `/// <reference types="@tingyuan/react-native-tailwindcss/types" />`
-
-`/// <reference types="nativewind/types" />`
 
 or import the types in a `.d.ts` file:
 
@@ -105,3 +105,13 @@ The babel plugin will automatically inject `const tw = useTw()` in each react co
 When the function name is "UpperCamelCase" style and has jsx statement, the function self will be treated as a react component function.
 
 So when you encounter error like `Rendered fewer hooks than expected` or `Property 'tw' doesn't exist`, you need to obey the limitation mentioned above.
+
+If you see error like `class xxx does not exist in generated tailwind styles`, please make sure to run command mentioned above in No.3 (Start tailwindcss watch task for development.)
+
+### Limitation ⚠
+
+I have to say, this project is not a comprehensive solution to use all features of tailwindcss in react-native(In fact, a considerable portion of the tailwindcss functionality is inherently exclusive to the web).
+
+But it will cover the most useful features of tailwindcss, including most of utilities classes and some prefix modifiers such as dark mode, responsive break point, vw/vh unit, viewport orientation.
+
+If you seek more enhanced and comprehensive solution, you can try [NativeWind](https://www.nativewind.dev/).

@@ -26,7 +26,7 @@ function startTailwind(root) {
 
   const handleCssChange = debounce(css => {
     if (writeToCss) {
-      const file = writeToCss.split('=')[1] || 'tailwind.css'
+      let file = writeToCss.split('=')[1] || 'tailwind.css'
       if (!file.endsWith('.css')) {
         file += '.css'
       }

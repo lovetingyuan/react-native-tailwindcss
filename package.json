@@ -8,11 +8,12 @@
     "react-native-tailwindcss-build": "./src/build-tailwind.js"
   },
   "scripts": {
-    "test": "echo 1",
-    "build": "echo 2",
+    "test": "node test",
+    "build": "echo no-build",
     "prepublishOnly": "npm run build && npm test",
-    "pub": "npx np",
-    "postinstall": "node ./src/build-tailwind.js"
+    "pub": "npx --yes np",
+    "prepare": "node ./src/build-tailwind.js",
+    "lint": "npx --yes oxlint@latest --fix"
   },
   "files": [
     "src",
@@ -36,7 +37,7 @@
     "react-native",
     "expo"
   ],
-  "author": "tingyuan",
+  "author": "lovetingyuan",
   "license": "MIT",
   "dependencies": {
     "cross-spawn": "^7.0.3",
@@ -49,9 +50,6 @@
     "tailwindcss": ">=3.4.0"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.23.3",
-    "babel-preset-expo": "^10.0.1",
-    "expo": "^50.0.4",
-    "np": "^9.2.0"
+    "@babel/preset-react": "^7.23.3"
   }
 }

@@ -6,10 +6,12 @@ const totailwind = require('./postcss-plugin')
 
 module.exports = function genStyle(css) {
   const cssObject = {}
+  const breakPoints = {}
   postcss([
     cssvariables(/*options*/),
     totailwind({
       cssObject,
+      breakPoints,
       ignoreClasses: ['transform', 'filter'],
     }),
   ])
@@ -18,12 +20,14 @@ module.exports = function genStyle(css) {
       to: '',
     })
     .then(() => {
-      const styleCode = `import { StyleSheet } from "react-native"\n\nexport default StyleSheet.create(${JSON.stringify(
-        cssObject,
-        null,
-        2
-      )})`
-      fs.writeFileSync(path.resolve(__dirname, 'style.js'), styleCode)
+      // const styles = JSON.stringify(cssObject, null, 2)
+      // .replaceAll('"@@@', '')
+      // .replaceAll('@@@"', '')
+      const styleCode = [
+        `export const styleSheets = ${JSON.stringify(cssObject, null, 2)}`,
+        `export const breakPoints = ${JSON.stringify(breakPoints, null, 2)}`,
+      ].join('\n')
+      fs.writeFileSync(path.resolve(__dirname, 'styles.js'), styleCode)
     })
     .catch(err => {
       console.log(err)

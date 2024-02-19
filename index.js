@@ -1,1 +1,1 @@
-export { useTw } from './src/tailwindcss'
+export { useTw } from './src/use-tw'
