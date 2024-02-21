@@ -19,7 +19,7 @@ function startTailwind(root) {
   const tailwindcss = require.resolve('tailwindcss/tailwind.css')
   // 启动tailwindcss进程
   const child = spawn('npx', `tailwindcss --no-autoprefixer -i ${tailwindcss} --watch`.split(' '), {
-    cwd: root,
+    cwd: root || process.cwd(),
   })
   let css = ''
   const writeToCss = process.argv.slice(2).find(v => v.startsWith('--write'))
@@ -53,5 +53,5 @@ function startTailwind(root) {
 module.exports = startTailwind
 
 if (require.main === module) {
-  startTailwind(process.cwd())
+  startTailwind()
 }

@@ -98,6 +98,11 @@ support `tw()` code hints and completion
 
 ### Caveats
 
+If you encounter any problem, please try to restart your app without cache:
+
+* Expo `npx expo start --clear`
+* React Native CLI `npx react-native start --reset-cache`
+
 The babel plugin will automatically inject `const tw = useTw()` in each react component function.
 
 `useTw` is a hook callee, so using `className` or `tw()` must be in react component function.
