@@ -1,43 +1,45 @@
-import type { StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native'
+import type {
+	StyleProp, ViewStyle, TextStyle, ImageStyle,
+} from 'react-native';
 
 declare global {
-  function tw(classes: string, ...styles: StyleProp<ViewStyle | TextStyle | ImageStyle>[]): any // StyleProp<ViewStyle | TextStyle | ImageStyle>
+	function tw(classes: string, ...styles: Array<StyleProp<ViewStyle | TextStyle | ImageStyle>>): any; // StyleProp<ViewStyle | TextStyle | ImageStyle>
 }
 
-// copy from nativewind: https://github.com/marklawlor/nativewind/blob/main/packages/react-native-css-interop/types.d.ts
+// Copy from nativewind: https://github.com/marklawlor/nativewind/blob/main/packages/react-native-css-interop/types.d.ts
 declare module 'react-native' {
-  interface FlatListProps<ItemT> extends VirtualizedListProps<ItemT> {
-    className?: string
-    tw?: string
-  }
+	type FlatListProperties<ItemT> = {
+		className?: string;
+		tw?: string;
+	} & VirtualizedListProps<ItemT>;
 
-  interface ImagePropsBase {
-    className?: string
-    tw?: string
-  }
+	type ImagePropertiesBase = {
+		className?: string;
+		tw?: string;
+	};
 
-  interface ViewProps {
-    className?: string
-    tw?: string
-  }
+	type ViewProperties = {
+		className?: string;
+		tw?: string;
+	};
 
-  interface TextProps {
-    className?: string
-    tw?: string
-  }
+	type TextProperties = {
+		className?: string;
+		tw?: string;
+	};
 
-  interface SwitchProps {
-    className?: string
-    tw?: string
-  }
+	type SwitchProperties = {
+		className?: string;
+		tw?: string;
+	};
 
-  interface InputAccessoryViewProps {
-    className?: string
-    tw?: string
-  }
+	type InputAccessoryViewProperties = {
+		className?: string;
+		tw?: string;
+	};
 
-  interface TouchableWithoutFeedbackProps {
-    className?: string
-    tw?: string
-  }
+	type TouchableWithoutFeedbackProperties = {
+		className?: string;
+		tw?: string;
+	};
 }

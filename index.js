@@ -1,1 +1,1 @@
-export { useTw } from './src/use-tw'
+export {useTw} from './src/use-tw.js';

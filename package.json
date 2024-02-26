@@ -13,7 +13,7 @@
     "prepublishOnly": "npm run build && npm test",
     "pub": "npx --yes np",
     "prepare": "node ./src/build-tailwind.js",
-    "lint": "npx --yes oxlint@latest --fix"
+    "lint": "npx --yes oxlint@latest --fix ."
   },
   "files": [
     "src",

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-const cp = require('child_process')
+const cp = require('node:child_process')
+
 const tailwindcss = require.resolve('tailwindcss/tailwind.css')
 const genStyle = require('./gen-style')
 

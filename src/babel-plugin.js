@@ -10,13 +10,34 @@ module.exports = function ({ types: t }) {
         const callee = path.node.callee
         // 判断函数调用是否为名为 "tw" 的函数调用
         if (t.isIdentifier(callee) && callee.name === 'tw') {
-          let functionDeclaration = path.findParent(
+          const functionDeclaration = path.findParent(
             parentPath =>
               (t.isFunctionDeclaration(parentPath.node) ||
                 t.isFunctionExpression(parentPath.node)) &&
-              t.isIdentifier(parentPath.node.id) &&
-              /^[A-Z][a-zA-Z0-9]*$/.test(parentPath.node.id.name)
+              t.isIdentifier(parentPath.node.id)
           )
+          const functionName = functionDeclaration.node.id.name
+          // const { functionNameWhiteList } = state.opts
+          if (
+            !(/^[A-Z][a-zA-Z\d]*$/.test(functionName) || /^use[A-Z][a-zA-Z\d]*$/.test(functionName))
+          ) {
+            // If (
+            //   Array.isArray(functionNameWhiteList) &&
+            //   functionNameWhiteList.some(v => {
+            //     if (typeof v === 'string') {
+            //       return funcName.includes(v)
+            //     }
+            //     return v.test(funcName)
+            //   })
+            // ) {
+            //   // ignore
+            // } else {
+            throw new Error(
+              `${moduleName}: "className" and "tw()" can only be used in react component function or react hook function while "${functionName}" is neither.`
+            )
+            // }
+          }
+
           if (!state.hasImported) {
             const importStatement = t.importDeclaration(
               [t.importSpecifier(t.identifier('useTw'), t.identifier('useTw'))],
@@ -38,7 +59,7 @@ module.exports = function ({ types: t }) {
                   if (
                     statement &&
                     t.isVariableDeclaration(statement) &&
-                    // statement.kind === 'const' &&
+                    // Statement.kind === 'const' &&
                     statement.declarations.length > 0 &&
                     t.isIdentifier(statement.declarations[0].id, { name: 'tw' })
                   ) {
@@ -60,24 +81,26 @@ module.exports = function ({ types: t }) {
         }
       },
       JSXOpeningElement(path) {
-        const classNameAttr = path.node.attributes.find(
-          attr => attr.name && attr.name.name === 'className'
+        const classNameAttribute = path.node.attributes.find(
+          attribute => attribute.name && attribute.name.name === 'className'
         )
-        if (!classNameAttr) {
+        if (!classNameAttribute) {
           return
         }
 
-        const styleAttr = path.node.attributes.find(attr => attr.name && attr.name.name === 'style')
+        const styleAttribute = path.node.attributes.find(
+          attribute => attribute.name && attribute.name.name === 'style'
+        )
 
-        if (styleAttr) {
+        if (styleAttribute) {
           // <div className="aa bb" style={{ cc: 1 }}></div>
           // 转换为 <div style={tw("aa bb", {cc: 1})}></div>
-          styleAttr.value.expression = t.callExpression(t.identifier('tw'), [
-            t.isJSXExpressionContainer(classNameAttr.value)
-              ? classNameAttr.value.expression
-              : classNameAttr.value,
-            styleAttr.value.expression,
-            // t.callExpression(t.identifier('tw'), [classNameAttr.value]),
+          styleAttribute.value.expression = t.callExpression(t.identifier('tw'), [
+            t.isJSXExpressionContainer(classNameAttribute.value)
+              ? classNameAttribute.value.expression
+              : classNameAttribute.value,
+            styleAttribute.value.expression,
+            // T.callExpression(t.identifier('tw'), [classNameAttr.value]),
           ])
         } else {
           // <div className="aa bb"></div>
@@ -87,9 +110,9 @@ module.exports = function ({ types: t }) {
               t.jsxIdentifier('style'),
               t.jsxExpressionContainer(
                 t.callExpression(t.identifier('tw'), [
-                  t.isJSXExpressionContainer(classNameAttr.value)
-                    ? classNameAttr.value.expression
-                    : classNameAttr.value,
+                  t.isJSXExpressionContainer(classNameAttribute.value)
+                    ? classNameAttribute.value.expression
+                    : classNameAttribute.value,
                 ])
               )
             )
@@ -97,7 +120,7 @@ module.exports = function ({ types: t }) {
         }
 
         // 移除原始的 className 属性
-        const index = path.node.attributes.indexOf(classNameAttr)
+        const index = path.node.attributes.indexOf(classNameAttribute)
         path.node.attributes.splice(index, 1)
       },
     },

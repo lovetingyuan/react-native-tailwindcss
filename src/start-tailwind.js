@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
+const fs = require('node:fs')
 const genStyle = require('./gen-style')
 
-function debounce(func, delay) {
+function debounce(function_, delay) {
   let timer
-  return function (...args) {
+  return function (...arguments_) {
     clearTimeout(timer)
     timer = setTimeout(() => {
-      func.call(this, ...args)
+      function_.call(this, ...arguments_)
     }, delay)
   }
 }
 
 function startTailwind(root) {
-  // if (process.env.NODE_ENV === 'development') {
+  // If (process.env.NODE_ENV === 'development') {
   const spawn = require('cross-spawn')
   const tailwindcss = require.resolve('tailwindcss/tailwind.css')
   // 启动tailwindcss进程
@@ -30,8 +30,10 @@ function startTailwind(root) {
       if (!file.endsWith('.css')) {
         file += '.css'
       }
+
       fs.writeFileSync(file, css)
     }
+
     genStyle(css)
   }, 500)
 
@@ -46,6 +48,7 @@ function startTailwind(root) {
     } else {
       css += cssData
     }
+
     handleCssChange(css)
   })
 }

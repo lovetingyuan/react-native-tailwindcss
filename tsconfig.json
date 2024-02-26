@@ -1,0 +1,23 @@
+{
+  "include": [
+    "*.ts",
+    "*.d.ts",
+  ],
+  "compilerOptions": {
+    "lib": [
+      "es2023"
+    ],
+    "target": "es2022",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "types": [
+      "node"
+    ]
+  }
+}
