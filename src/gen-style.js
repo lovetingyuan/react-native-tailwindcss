@@ -6,6 +6,7 @@ const postcssCustomProperties = require('postcss-custom-properties')
 const totailwind = require('./postcss-plugin')
 
 module.exports = function genStyle(css) {
+  css = css.replace('*, ::before, ::after {', '*, ::before, ::after, :root {')
   const cssObject = {}
   const breakPoints = {}
   postcss([
